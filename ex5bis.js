@@ -3,7 +3,7 @@ let main$$ = document.querySelector("main")
 const input$$ = document.querySelector("input")
 
 const getAllPokemons = async () => {
-    for(let i = 1; i <= 251; i++){
+    for(let i = 1; i <= 50; i++){
         const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${i}/`)
         const result = await response.json();
         arrayPokemons.push(result);
@@ -11,11 +11,17 @@ const getAllPokemons = async () => {
     // console.log(arrayPokemons)
     return arrayPokemons;
 }
+
 console.log(arrayPokemons);
+
 const mapPokemons = (pokemons) => {
     return pokemons.map((results) => ({
         nombre: results.name,
-        foto: results.sprites.front_default
+        foto: results.sprites.front_default,
+        altura: results.height,
+        peso: results.weight,
+        numeroID: results.type
+        
     }))
 }
 
@@ -24,12 +30,16 @@ const printPokemons = (pokemons) => {
     for (const drawpokes of pokemons) {
         const characterDiv$$ =  document.createElement("div")
         characterDiv$$.innerHTML = `
-            <h2>${drawpokes.nombre}</h2>
+            <h2>${drawpokes.nombre} </h2>
+            <h2>${drawpokes.numeroID}</h2>
             <img src="${drawpokes.foto}" alt = "${drawpokes.nombre}">
+            <h1>Altura: ${drawpokes.altura} m</h1>
+            <h2>Peso: ${drawpokes.peso} kg</h2>
         `;
         main$$.appendChild(characterDiv$$);
     }
 }
+
 const drawInput = (mapingpokes) => {
     input$$.addEventListener("input", () =>searchCaracters(input$$.value, mapingpokes))
     }
@@ -46,4 +56,5 @@ const init = async () => {
     printPokemons(mapingpokes);
     drawInput(mapingpokes);
 }
+
 init();
